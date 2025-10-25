@@ -7,4 +7,4 @@ def health_check():
     """
     Health check endpoint to verify API status.
     """
-    return {"status": "ok", "message": "SmartOps Tickets API is running"}
+    return {"status": "ok"}
