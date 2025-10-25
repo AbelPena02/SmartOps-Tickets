@@ -15,7 +15,7 @@ app = FastAPI(
     version="0.1.0",
     description="AI-powered incident and ticket management system for DevOps teams."
 )
-
+ 
 # Routers
 app.include_router(health_router)
 app.include_router(tickets_router)
