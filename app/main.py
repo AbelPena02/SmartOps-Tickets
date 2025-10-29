@@ -4,7 +4,7 @@ from app.api.routes_tickets import router as tickets_router
 from app.api.routes.classification import router as analytics_router
 from app.core.logging_config import setup_logging
 from app.core.db import init_db
-import asyncio
+from prometheus_fastapi_instrumentator import Instrumentator
 import logging
 
 setup_logging()
@@ -15,7 +15,9 @@ app = FastAPI(
     version="0.1.0",
     description="AI-powered incident and ticket management system for DevOps teams."
 )
- 
+
+Instrumentator().instrument(app).expose(app, endpoint="/metrics")
+
 # Routers
 app.include_router(health_router)
 app.include_router(tickets_router)
