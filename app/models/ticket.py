@@ -12,3 +12,4 @@ class Ticket(Base):
     priority = Column(String, default="medium")
     status = Column(String, default="open")
     created_at = Column(DateTime, default=datetime.utcnow)
+ 
