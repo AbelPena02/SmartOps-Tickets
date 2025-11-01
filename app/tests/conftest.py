@@ -8,8 +8,18 @@ from app.core.db import Base, get_db
 
 TEST_DATABASE_URL = "sqlite+aiosqlite:///:memory:"
 
-test_engine = create_async_engine(TEST_DATABASE_URL, echo=True, future=True)
-TestSessionLocal = sessionmaker(bind=test_engine, class_=AsyncSession, expire_on_commit=False)
+test_engine = create_async_engine(
+    TEST_DATABASE_URL,
+    connect_args={"check_same_thread": False},
+    echo=True,
+    future=True
+)
+
+TestSessionLocal = sessionmaker(
+    bind=test_engine,
+    class_=AsyncSession,
+    expire_on_commit=False
+)
 
 @pytest.fixture(scope="session", autouse=True)
 async def init_test_db():
@@ -18,12 +28,13 @@ async def init_test_db():
     yield
     await test_engine.dispose()
 
-@pytest.fixture(scope="function")
+@pytest.fixture
 async def db_session():
     async with TestSessionLocal() as session:
         yield session
+        await session.rollback()
 
-@pytest.fixture(scope="function")
+@pytest.fixture
 async def client(db_session):
     async def override_get_db():
         yield db_session
