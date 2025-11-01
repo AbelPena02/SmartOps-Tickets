@@ -26,8 +26,7 @@ async def db_session():
 @pytest.fixture
 async def client(db_session):
     async def override_get_db():
-        async with db_session as session:
-            yield session
+        yield db_session
 
     app.dependency_overrides[get_db] = override_get_db
 
