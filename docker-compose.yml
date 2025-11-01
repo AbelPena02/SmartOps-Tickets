@@ -1,3 +1,5 @@
+version: "3.9"
+
 services:
   api:
     build: .
@@ -7,11 +9,14 @@ services:
     env_file:
       - .env
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     volumes:
       - .:/app
     command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
- 
+    networks:
+      - smartops_net
+
   db:
     image: postgres:16
     container_name: smartops_db
@@ -22,6 +27,53 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $POSTGRES_USER -d $POSTGRES_DB"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - smartops_net
+
+  pytest:
+    build: .
+    container_name: smartops_tests
+    env_file:
+      - .env
+    command: pytest --maxfail=1 --disable-warnings -v
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - smartops_net
+    volumes:
+      - .:/app
+
+  prometheus:
+    image: prom/prometheus
+    container_name: smartops_prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    depends_on:
+      - api
+    networks:
+      - smartops_net
+
+  grafana:
+    image: grafana/grafana
+    container_name: smartops_grafana
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
+    networks:
+      - smartops_net
+
+networks:
+  smartops_net:
+    driver: bridge
 
 volumes:
   postgres_data:
