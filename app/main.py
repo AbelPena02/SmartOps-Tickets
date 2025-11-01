@@ -17,7 +17,7 @@ app = FastAPI(
 )
 
 Instrumentator().instrument(app).expose(app, endpoint="/metrics")
- 
+
 # Routers
 app.include_router(health_router)
 app.include_router(tickets_router)
