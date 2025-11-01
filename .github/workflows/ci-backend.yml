@@ -39,7 +39,7 @@ jobs:
         pip install -r requirements.txt
 
     - name: Run unit tests
-      working-directory: backend/
+      working-directory: app/
       env:
         POSTGRES_USER: smartops_user
         POSTGRES_PASSWORD: smartops_pass
@@ -48,4 +48,4 @@ jobs:
         POSTGRES_PORT: 5432
         DATABASE_URL: postgresql://smartops_user:smartops_pass@db:5432/smartops_db
       run: |
-        pytest -q
+        pytest -q tests/
