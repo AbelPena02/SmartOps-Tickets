@@ -1,7 +1,7 @@
 import pytest
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.orm import sessionmaker
-from app.db import Base, get_db
+from app.core.db import Base, get_db
 from app.main import app
 from httpx import AsyncClient
 from fastapi import Depends
