@@ -17,7 +17,6 @@ TestSessionLocal = sessionmaker(
 
 @pytest.fixture(scope="session", autouse=True)
 async def init_test_db():
-    # Crear tablas
     async with test_engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
     yield
