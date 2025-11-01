@@ -8,7 +8,9 @@ POSTGRES_DB = os.getenv("POSTGRES_DB")
 POSTGRES_HOST = os.getenv("POSTGRES_HOST")
 POSTGRES_PORT = os.getenv("POSTGRES_PORT")
 
-if POSTGRES_USER and POSTGRES_PASSWORD and POSTGRES_DB and POSTGRES_HOST and POSTGRES_PORT:
+if os.getenv("CI") == "true":
+    DATABASE_URL = "sqlite+aiosqlite:///:memory:"
+elif POSTGRES_USER and POSTGRES_PASSWORD and POSTGRES_DB and POSTGRES_HOST and POSTGRES_PORT:
     DATABASE_URL = f"postgresql+asyncpg://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}"
 else:
     DATABASE_URL = os.getenv("DATABASE_URL", "sqlite+aiosqlite:///./test.db")
@@ -22,6 +24,6 @@ async def get_db():
         yield session
 
 async def init_db():
-    import app.models.ticket 
+    import app.models.ticket
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
