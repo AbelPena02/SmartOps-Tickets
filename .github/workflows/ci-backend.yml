@@ -41,5 +41,7 @@ jobs:
       - name: Run unit tests
         env:
           DATABASE_URL: postgresql://postgres:postgres@localhost:5432/ticketsdb
+          PYTHONPATH: .
         run: |
           pytest -q
+
