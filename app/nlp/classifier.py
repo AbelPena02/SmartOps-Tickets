@@ -1,7 +1,7 @@
 from joblib import load
 from pathlib import Path
 import logging
- 
+
 logger = logging.getLogger(__name__)
 
 MODEL_PATH = Path("app/nlp/models/ticket_classifier.joblib")
