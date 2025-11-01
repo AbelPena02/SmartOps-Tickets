@@ -13,6 +13,6 @@ async def get_db():
         yield session
 
 async def init_db():
-    from app.models.ticket import Ticket 
+    import app.models.ticket
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
