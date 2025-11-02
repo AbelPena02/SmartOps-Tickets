@@ -70,7 +70,7 @@ services:
       - prometheus
     networks:
       - smartops_net
-
+ 
 networks:
   smartops_net:
     driver: bridge
