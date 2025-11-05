@@ -89,7 +89,6 @@ async def delete_ticket(ticket_id: int, db: AsyncSession = Depends(get_db)):
 
     return {"message": f"Ticket {ticket_id} deleted successfully"}
 
-
 @router.post("/analyze")
 async def analyze_ticket(data: dict):
     description = data.get("description")
