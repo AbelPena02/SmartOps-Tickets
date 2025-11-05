@@ -17,7 +17,7 @@ app = FastAPI(
 )
 
 Instrumentator().instrument(app).expose(app, endpoint="/metrics")
- 
+
 # Routers
 app.include_router(health_router)
 app.include_router(tickets_router)
@@ -32,3 +32,4 @@ async def startup_event():
 async def root():
     logger.info("Root endpoint accessed")
     return {"message": "Welcome to SmartOps Tickets API"}
+ 
